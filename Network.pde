@@ -20,6 +20,42 @@ class Network {
     connections = new ArrayList<Connection>();
   }
 
+
+    void create(int[] NTW, String type){
+    int layers = NTW.length;
+    int inputs = NTW[0];
+    int outputs = NTW[NTW.length-1];
+    
+ 
+    for (int i = 0; i < layers; i++) {
+       {
+        for (int j = 0; j < NTW[i]; j++) {
+          float x = map(i, 0, layers, -w/2+50, w/2);
+          float y = map(j, 0, max(NTW), -h/2+25, h/2-25);
+          String ACT;
+          if (i == 0) {
+            ACT = "identity";
+          }
+          else {
+            ACT = "sigmoid";      
+          }
+          
+          Neuron n = new Neuron(x, y, ID, ACT);
+          ID++;
+          network.display();
+          if (i > 0) {
+            //Each neuron is connected to all the ones in the previous layer
+            for (int k = 0; k < NTW[i-1]; k++) {
+              Neuron prev = network.neurons.get(network.neurons.size()-NTW[i-1]+k-j); 
+              network.connect(prev, n, random(1), CID);
+              CID++;
+            }
+          }
+          network.addNeuron(n);
+        }
+      }
+    } 
+  }
   // We can add a Neuron
   void addNeuron(Neuron n) {
     neurons.add(n);
@@ -45,6 +81,8 @@ class Network {
         
   }
   
+ 
+  
   // Backpropagation to adjust weights
   void backpropagate() {
     //Need to do: for every node => for every connected node => adjust weight 
@@ -55,10 +93,7 @@ class Network {
      
           print(c.weight);print(" ");println(c.ID);
           //println(network.connections.display());
-          
     }
- 
-    
   }
   
   // Update the animation
