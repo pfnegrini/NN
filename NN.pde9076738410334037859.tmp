@@ -7,7 +7,7 @@
 Network network;
  int w = 640, h =640, ID=0, CID = 0;
  int[] NTW = {3, 3, 2}; 
- float[] Error = new float[NTW[NTW.length-1]-1]; 
+ float[] Error = new float[]; 
  float[] reference = {0, 0};
 
 void setup() {

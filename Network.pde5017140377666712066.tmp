@@ -115,23 +115,23 @@ class Network {
  
    float[] Error(float[] results, float[] references){
      float[] E = new float[NTW[NTW.length-1]];
-     for (int i = 0; i < NTW[NTW.length-1]; i++){
+     for (i = 0; i <= NTW[NTW.length-1]; i++){
        E[i] = results[i] - references[i];
      }
-   return E;
+   return E[];
    }
    
    void backpropagate(float[] results, float[] references) {
     //Need to do: for every node => for every connected node => adjust weight 
     //Here's how to access the Connection's properties
-     //for (int i = connections.size(); i >= 0;i--) 
+     for (int i = connections.size(); i >= 0;i--) 
      {
        /*Connection c = connections.get(i);
         c.weight = c.b.sum + c.a.sum * c.weight;
      println(error);*/
           //print(c.weight);print(" ");println(c.ID);
           //println(network.connections.display());
-          println(Error(results, references));
+          println(E(results, references));
     }
   }
   
