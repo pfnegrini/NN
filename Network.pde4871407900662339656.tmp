@@ -83,7 +83,7 @@ class Network {
   
  void ffd(float[] input){
    String LOG = "N/A"; 
-   float[] R = new float[neurons.size()-1]; 
+   float[] R={1,1,1,1,1,1}; 
    //First initialize the NN with the input values 
     for (int i = 0; i < input.length; i++){
       Neuron n = neurons.get(i);
@@ -97,16 +97,16 @@ class Network {
        LOG = "a: " + str(c.a.ID) + " b: " + str(c.b.ID) + " a sum: " + str(c.a.sum) + " weight " + str(c.weight) + " b sum:  " + str(c.b.sum);
        println(LOG);
     }
-    //Problem with teh number of neurons
-    for (int i =  NTW[NTW.length-1]-1; i>0 ;i--) 
+    
+    for (int i =  NTW[NTW.length]-1; i>=0 ;i--) 
      {
-      R[i] = neurons.get(neurons.size()-1 - i).sum;
-      //println(i);
-      println(neurons.size()-1-i);
+      R[i] = neurons.get(neurons.size() - i).sum;
       println(R[i]);
-      
+      println(neurons.size());
+      println(NTW[NTW.length]-1);
      }
- }  
+ }
+  
   
    void backpropagate() {
     //Need to do: for every node => for every connected node => adjust weight 

@@ -6,7 +6,7 @@
 
 Network network;
  int w = 640, h =640, ID=0, CID = 0;
-  int[] NTW = {3, 3, 2}; 
+  int[] NTW = {3, 3, 1}; 
  
 void setup() {
   size(w,h); 
