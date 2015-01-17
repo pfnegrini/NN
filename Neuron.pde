@@ -18,6 +18,7 @@ class Neuron {
   // The Neuron's size can be animated
   float r = 32;
   int ID;
+  float bias=1;
 
   Neuron(float x, float y, int ID_, String activation_) {
     location = new PVector(x, y);
@@ -32,7 +33,7 @@ class Neuron {
   } 
 
   //Activation functions
- /* float identity(float x) {
+ float identity(float x) {
 
     return x;
   }
@@ -56,14 +57,14 @@ class Neuron {
     }
     return y;
   }
-*/
+
   // Receive an input
   void feedforward(float input) {
     // Accumulate it
     sum += input;
     // Activate it?
     float s=0;
-  /*  if (activation == "identity") {
+    if (activation == "identity") {
       s = identity(sum);
     } else if (activation == "sigmoid") {
       s = sigmoid(sum);
@@ -72,8 +73,7 @@ class Neuron {
     } else if (activation == "step") {
       s = step(sum);
     }
-    text(s, location.x+30, location.y+r*1.1);
-    sum= s;*/
+    sum= s + bias;
     if (sum > 1)
     { 
       //println((sum));  
@@ -104,4 +104,3 @@ class Neuron {
     r = lerp(r, 32, 0.1);
   }
 }
-
