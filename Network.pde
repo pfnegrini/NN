@@ -3,6 +3,7 @@
 // http://natureofcode.com
 
 // An animated drawing of a Neural Network
+//ALSO: http://www.codeproject.com/Articles/14342/Designing-And-Implementing-A-Neural-Network-Librar
 
 class Network {
   
@@ -81,9 +82,10 @@ class Network {
         
   }
   
- float[] ffd(float[] input){
+ float ffd(float[] input){
    String LOG = "N/A"; 
-   float[] R = new float[NTW[NTW.length-1]]; 
+   //float[] R = new float[NTW[NTW.length-1]]; 
+   float R = 0;
    //First initialize the NN with the input values 
     for (int i = 0; i < input.length; i++){
       Neuron n = neurons.get(i);
@@ -97,42 +99,62 @@ class Network {
        LOG = "a: " + str(c.a.ID) + " b: " + str(c.b.ID) + " a sum: " + str(c.a.sum) + " weight " + str(c.weight) + " b sum:  " + str(c.b.sum);
        println(LOG);
     }
-    //Problem with teh number of neurons
-    for (int i =  NTW[NTW.length-1]-1; i>0 ;i--) 
+    //Sum the output nodes. Problem with the number of neurons
+ /*   for (int i =  NTW[NTW.length-1]-1; i>0 ;i--) 
      {
       R[i] = neurons.get(neurons.size()-1 - i).sum;
-      //println(i);
-      //println(neurons.size()-1-i);
-      //println(R[i]);
+      println(neurons.size()-1-i);
+      println(R[i]);
      }
-    for (int i = 0; i< connections.size();i++) 
+   */  
+   R = neurons.get(neurons.size()-1).sum;
+    for (int i = 0; i< neurons.size();i++) 
      {
-       Connection c = connections.get(i);
-       c.a.sum = 0;
+       Neuron n = neurons.get(i);
+       n.sum = 0;
      } 
      return R;
  }
- 
-   float[] Error(float[] results, float[] references){
-     float[] E = new float[NTW[NTW.length-1]];
-     for (int i = 0; i < NTW[NTW.length-1]; i++){
-       E[i] = results[i] - references[i];
-     }
-   return E;
+    
+   //Objective function: steepest descent method 
+   float J(float desired, float actual){
+     float[] Descent = new float[NTW[NTW.length-1]];
+     float res=0;
+     /*for (int i = 0; i < NTW[NTW.length-1]; i++){
+       res = res + 0.5 * (desired[i] - actual[i]);
+     }*/
+   //return res = 0.5 * (desired - actual);
+   return res = actual * (1 - actual) * (desired - actual);
    }
    
-   void backpropagate(float[] results, float[] references) {
+   
+    // Backpropagation to adjust weights
+  void backpropagate(float desired, float actual) {
+    String LOG = "N/A"; 
+    println("Backpropagation");
     //Need to do: for every node => for every connected node => adjust weight 
     //Here's how to access the Connection's properties
-     //for (int i = connections.size(); i >= 0;i--) 
+      //output layer
+      connections.get(connections.size()-1).weight = J(desired, actual); 
+    for (int i = neurons.size()-1; i >= 0; i--) 
      {
-       /*Connection c = connections.get(i);
-        c.weight = c.b.sum + c.a.sum * c.weight;
-     println(error);*/
-          //print(c.weight);print(" ");println(c.ID);
-          //println(network.connections.display());
-          println(Error(results, references));
-    }
+      Neuron n = neurons.get(i);
+      
+      for (int j = 0; j < n.connections.size();j++)
+      {    
+        n.connections.get(j).weight = n.connections.get(j).weight * J(desired, actual); 
+        LOG = "n: " + str(i) + " c: " + str(n.connections.get(j).ID) + " w: " + str(n.connections.get(j).weight) + " J:" + J(desired, actual);
+        //println(n.connections.get(j).b.sum);
+        //text(n.connections.get(j).b.sum, n.location.x+340,n.location.y+340);
+        //text("A", n.connections.get(j).b.location.x+50, n.connections.get(j).b.location.y);
+        //text(i, n.location.x+340, n.location.y+340);
+        //text("TEST", 600, 600);
+        //println(n.connections.get(j).b.location.x);
+        println(LOG);
+      }
+     }    
+    
+
   }
   
   // Update the animation
@@ -168,4 +190,3 @@ class Network {
     popMatrix();
   }
 }
-
