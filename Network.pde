@@ -128,34 +128,30 @@ class Network {
    }
    
    
-    // Backpropagation to adjust weights
+        // Backpropagation to adjust weights
   void backpropagate(float desired, float actual) {
     String LOG = "N/A"; 
-    println("Backpropagation");
+    //println("Backpropagation");
     //Need to do: for every node => for every connected node => adjust weight 
     //Here's how to access the Connection's properties
       //output layer
-      connections.get(connections.size()-1).weight = J(desired, actual); 
+      //connections.get(connections.size()-1).weight = J(desired, actual); 
     for (int i = neurons.size()-1; i >= 0; i--) 
      {
       Neuron n = neurons.get(i);
       
       for (int j = 0; j < n.connections.size();j++)
       {    
-        n.connections.get(j).weight = n.connections.get(j).weight * J(desired, actual); 
-        LOG = "n: " + str(i) + " c: " + str(n.connections.get(j).ID) + " w: " + str(n.connections.get(j).weight) + " J:" + J(desired, actual);
-        //println(n.connections.get(j).b.sum);
-        //text(n.connections.get(j).b.sum, n.location.x+340,n.location.y+340);
-        //text("A", n.connections.get(j).b.location.x+50, n.connections.get(j).b.location.y);
-        //text(i, n.location.x+340, n.location.y+340);
-        //text("TEST", 600, 600);
-        //println(n.connections.get(j).b.location.x);
-        println(LOG);
+        n.connections.get(j).weight = n.connections.get(j).weight + n.connections.get(j).a.sum * J(desired, actual); 
+        //LOG = "n: " + str(i) + " c: " + str(n.connections.get(j).ID) + " w: " + str(n.connections.get(j).weight) + " J:" + J(desired, actual);
+        //text(n.connections.get(j).weight, n.connections.get(j).b.location.x+50, n.connections.get(j).b.location.y);
+        //println(LOG);
       }
      }    
     
 
   }
+  
   
   // Update the animation
   void update() {
