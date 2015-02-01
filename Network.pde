@@ -1,27 +1,3 @@
-// The Nature of Code
-// Daniel Shiffman
-// http://natureofcode.com
-
-// An animated drawing of a Neural Network
-//ALSO: http://www.codeproject.com/Articles/14342/Designing-And-Implementing-A-Neural-Network-Librar
-
-class Network {
-  
-  // The Network has a list of neurons
-  ArrayList<Neuron> neurons;
-  
-  // The Network now keeps a duplicate list of all Connection objects.
-  // This makes it easier to draw everything in this class
-  ArrayList<Connection> connections;
-  PVector location;
-
-  Network(float x, float y) {
-    location = new PVector(x, y);
-    neurons = new ArrayList<Neuron>();
-    connections = new ArrayList<Connection>();
-  }
-
-
     void create(int[] NTW, String type){
     int layers = NTW.length;
     int inputs = NTW[0];
@@ -57,6 +33,7 @@ class Network {
       }
     } 
   }
+  
   // We can add a Neuron
   void addNeuron(Neuron n) {
     neurons.add(n);
@@ -64,7 +41,7 @@ class Network {
 
   // We can connection two Neurons
   void connect(Neuron a, Neuron b, float weight, int ID) {
-    Connection c = new Connection(a, b, weight, ID);
+    Connection c = new Connection(a, b, weight, ID, 'true');
     a.addConnection(c);
     // Also add the Connection here
     connections.add(c);
@@ -76,29 +53,42 @@ class Network {
     for (int i = 0; i < input.length; i++){
     
       Neuron n = neurons.get(i);
-      n.feedforward(input[i]);
+      //n.ativate(input[i]);
     
     }
         
   }
   
+  //NOT SURE ABOUT THIS...
  float ffd(float[] input){
+   //println("FFD");
    String LOG = "N/A"; 
    //float[] R = new float[NTW[NTW.length-1]]; 
    float R = 0;
+   int currentLayer=0;
    //First initialize the NN with the input values 
     for (int i = 0; i < input.length; i++){
       Neuron n = neurons.get(i);
-      n.sum = n.sum + input[i];
-    }
+      n.sum = n.activate(n.sum + input[i]);
+    } 
     
     for (int i = 0; i< connections.size();i++) 
      {
        Connection c = connections.get(i);
+       
        c.b.sum = c.b.sum + c.a.sum * c.weight;
        LOG = "a: " + str(c.a.ID) + " b: " + str(c.b.ID) + " a sum: " + str(c.a.sum) + " weight " + str(c.weight) + " b sum:  " + str(c.b.sum);
-       println(LOG);
+       //println(LOG);
+       
+       //If layer is over need to activate nodes
+       if (currentLayer + 1 == c.b.Layer ){
+         LOG = "Last conn " + str(c.b.Layer) + " " +str(c.b.ID);
+         println(LOG);
+         currentLayer ++;
+       }
+    
     }
+    
     //Sum the output nodes. Problem with the number of neurons
  /*   for (int i =  NTW[NTW.length-1]-1; i>0 ;i--) 
      {
@@ -107,7 +97,8 @@ class Network {
       println(R[i]);
      }
    */  
-   R = neurons.get(neurons.size()-1).sum;
+
+     R = neurons.get(neurons.size()-1).sum;
     for (int i = 0; i< neurons.size();i++) 
      {
        Neuron n = neurons.get(i);
@@ -165,13 +156,18 @@ class Network {
     for (int i = 0; i < neurons.size();i++) 
      {
       Neuron n = neurons.get(i);
-      for (int j = 0; j < n.connections.size();j++)
-      {
-        LOG = str(i) + ' ' + n.activation + ' ' + str(n.connections.get(j).b.ID) + ' ' + str(n.connections.get(j).ID) + ' ' + str(n.connections.get(j).weight);
+        LOG = "ID " + str(n.ID) + " L: " + str(n.Layer) + ' ' + n.activation + ' ';
         println(LOG);
+        n.printConn();
+     }
+      for (int j = 0; j < connections.size();j++)
+      {
+        Connection c = connections.get(j);
+        LOG = "ID " + str(c.ID) + " La: " + str(c.a.Layer) + " Lb: " + str(c.b.Layer);
+        //println(LOG);
        }
      } 
-  }
+  
   // Draw everything
   void display() {
     pushMatrix();

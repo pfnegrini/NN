@@ -19,12 +19,14 @@ class Neuron {
   float r = 32;
   int ID;
   float bias=1;
+  int Layer;
 
-  Neuron(float x, float y, int ID_, String activation_) {
+  Neuron(float x, float y, int ID_, String activation_, int Layer_) {
     location = new PVector(x, y);
     connections = new ArrayList<Connection>();
     ID = ID_;
     activation = activation_;
+    Layer = Layer_;
   }
 
   // Add a Connection
@@ -59,11 +61,8 @@ class Neuron {
   }
 
   // Receive an input
-  void feedforward(float input) {
-    // Accumulate it
-    sum += input;
-    // Activate it?
-    float s=0;
+  float activate(float input) {
+    float s=0, o=0;
     if (activation == "identity") {
       s = identity(sum);
     } else if (activation == "sigmoid") {
@@ -73,14 +72,9 @@ class Neuron {
     } else if (activation == "step") {
       s = step(sum);
     }
-    sum= s + bias;
-    if (sum > 1)
-    { 
-      //println((sum));  
-      fire();
-      sum = 0;  // Reset the sum to 0 if it fires
-    }
-  }  
+    return o = s + bias;
+  } 
+  
   // The Neuron fires
   void fire() {
     r = 64;   // It suddenly is bigger
@@ -103,4 +97,16 @@ class Neuron {
     // Size shrinks down back to original dimensions
     r = lerp(r, 32, 0.1);
   }
+  
+  void printConn(){
+    String LOG ="N/A";
+  for (int j = 0; j < connections.size();j++)
+      {
+        Connection c = connections.get(j);
+         LOG = "CID " + str(c.ID) + " a " + str(c.a.ID) + " b " + str(c.b.ID) + " La: " + str(c.a.Layer) + " Lb: " + str(c.b.Layer);
+        println(LOG);
+      }
+  
+  }
 }
+

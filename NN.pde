@@ -18,6 +18,8 @@ void setup() {
       //Here's how to access the neuron's properties
       {
       network.create(NTW, "none");
+      network.display();
+      
       network.printNTW();
       //float[] input = {random(10,50), random(-5,50), random(-10,10)};
       //println(network.ffd(input));   
@@ -37,17 +39,24 @@ void setup() {
     }*/
       //serialn(network.neurons[1].r);
      
-        
+        float[] input = {random(-10,10), random(-10,100)};
+  //network.backpropagate(target(input), network.ffd(input));
+   network.ffd((input));
        
     }
 
-for(int i = 0; i<= 10; i++){
-  float[] input = {random(0,10), random(0,100)};
-  network.backpropagate(target(input), network.ffd(input));
+for(int i = 0; i<= 10000; i++){
+  //float[] input = {random(-10,10), random(-10,100)};
+  //network.backpropagate(target(input), network.ffd(input));
+  //network.ffd((input));
 }
-float[] input = {2, 1};
-  
-print("Result (2,1): ");println(network.ffd(input));
+
+println("Trainig");
+float[] input = {8.5, 9.5};
+LOG = "input: " + str(input[0]) + " " + str(input[1]) + " target: " + str(target(input)) + " NN: " + str(network.ffd(input));
+println(LOG);
+println("--------------------------");
+
 
 }
 
@@ -70,7 +79,7 @@ void pr(){
 
   // Every 30 frames feed in an input
   if (frameCount % 30 == 0) {
-    float[] input = {random(10,50), random(-5,50), random(-10,10)};
+    float[] input = {random(0,1), random(-1,1), random(-1,1)};
     network.feedforward(input);
   }
   

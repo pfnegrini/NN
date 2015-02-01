@@ -14,16 +14,18 @@ class Connection {
   int ID;
   // Variables to track the animation
   boolean sending = false;
+  boolean last = false;
   PVector sender;
   
   // Need to store the output for when its time to pass along
   float output = 0;
 
-  Connection(Neuron from, Neuron to, float w, int ID_) {
+  Connection(Neuron from, Neuron to, float w, int ID_, boolean last_) {
     weight = w;
     a = from;
     b = to;
     ID = ID_;
+    last = last_;
   }
   
   // The Connection is active
@@ -44,7 +46,7 @@ class Connection {
       // If we've reached the end
       if (d < 1) {
         // Pass along the output!
-        b.feedforward(output);
+        b.activate(output);
         sending = false;
       }
     }
